@@ -37,17 +37,17 @@ def thread_worker_function(num):
         if f is None:
             break
 
-        # cmd = ('./bazel-bin/n2p/json_server/json_server \
-        # --model ../models/crf/x86/model \
-        # --valid_labels ../c_valid_labels \
-        # -logtostderr \
-        # --port {}').format(str(port))
-
         cmd = ('./bazel-bin/n2p/json_server/json_server \
-        --model ../models/crf/x64/model \
+        --model ../models/crf/x86/model \
         --valid_labels ../c_valid_labels \
         -logtostderr \
         --port {}').format(str(port))
+
+        # cmd = ('./bazel-bin/n2p/json_server/json_server \
+        # --model ../models/crf/x64/model \
+        # --valid_labels ../c_valid_labels \
+        # -logtostderr \
+        # --port {}').format(str(port))
 
         logging.info(cmd)
 

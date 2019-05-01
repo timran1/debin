@@ -25,6 +25,7 @@ def setup_logging(log_filename):
 
 def thread_worker_function(num):
 
+
     tid = num
     port = 10000 + tid
 
@@ -37,17 +38,13 @@ def thread_worker_function(num):
         if f is None:
             break
 
-        logging.info ("[{}] Processing {}".format(port, f[0]))
+        logging.info ("Processing {}".format(port, f[0]))
         
         try:
-            cmd = ("python3 py/evaluate.py --binary {} --debug_info {} -two_pass --fp_model models/variable/x86/ "
-                     "--n2p_url http://localhost:{} --stat {}").format(f[1], f[0], str(port), f[2])
-
-            # cmd = ("python3 py/evaluate.py --binary {} --debug_info {} -two_pass --fp_model models/variable/x64/ "
-            #         "--n2p_url http://localhost:{} --stat {}").format(f[1], f[0], str(port), f[2])
+            cmd = ("python ./uroboros.py {} -a 3; mv ./{} {}").format(f[0], f[2], f[1])
             logging.info(cmd)
 
-            output = check_output("cd /store/debin; {}".format(cmd), shell=True).decode()
+            output = check_output("cd /store/uroboros/uroboros/src; {}".format(cmd), shell=True).decode()
             # logging.info("Output = " + output)
         except Exception as e:
             logging.warn("Error: " + str(e))
@@ -57,18 +54,18 @@ def thread_worker_function(num):
     logging.info ("Killing thread " + str(tid))
 
 
+
 if __name__== "__main__":
 
-    setup_logging("log.log")
+    setup_logging("log-uroboros.log")
 
     dirs = ["/store/binaries/dataset-x86-uroboros/binary"]
-    strip_rel = "/../strip/"
-    results_rel = "/../result/"
+    bin_rel = "/../strip/"
     thread_count = 32
 
     files = []
     for dir in dirs:
-        files_current = [(os.path.join(dir, f), os.path.join(dir + strip_rel, f), os.path.join(dir + results_rel, f + ".txt"))
+        files_current = [(os.path.join(dir, f), os.path.join(dir + bin_rel, f), f)
                             for f in os.listdir(dir) if os.path.isfile(os.path.join(dir, f))]
         files = files + files_current
 
@@ -90,5 +87,3 @@ if __name__== "__main__":
 
     for t in thread_workers:
         t.join()
-
-

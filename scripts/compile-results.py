@@ -4,7 +4,7 @@ import csv
 
 if __name__== "__main__":
 
-    dirs = ["/store/binaries/dataset-x64-multiversed/result/"]
+    dirs = ["/store/binaries/dataset-x86-uroboros/result/"]
 
     files = []
     for dir in dirs:
